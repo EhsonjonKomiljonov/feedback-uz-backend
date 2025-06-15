@@ -1,19 +1,10 @@
 import { Admin } from "../models/admin.model.js";
 import jwt from "jsonwebtoken";
-import { checkIsSuperAdmin } from "../middlewares/isSuperAdmin.check.js";
 import sha256 from "sha256";
 
-export default {
-  GET_ALL: async (req, res) => {
+export class AdminController {
+  async GET_ALL(req, res) {
     try {
-      const { authorization } = req.headers;
-
-      const checkSuperAdmin = checkIsSuperAdmin(authorization);
-
-      if (!checkSuperAdmin) {
-        return res.status(401).send("You don't have permission to get admins!");
-      }
-
       const admins = await Admin.findAll({
         where: {
           role: "admin",
@@ -24,8 +15,8 @@ export default {
     } catch (err) {
       res.status(err?.status || 400).send(err.message);
     }
-  },
-  LOGIN: async (req, res) => {
+  }
+  async LOGIN(req, res) {
     try {
       const { login, password } = req.body;
 
@@ -63,19 +54,9 @@ export default {
     } catch (err) {
       res.status(err?.status || 400).send(err.message);
     }
-  },
-  CREATE: async (req, res) => {
+  }
+  async CREATE(req, res) {
     try {
-      const { authorization } = req.headers;
-
-      const checkSuperAdmin = checkIsSuperAdmin(authorization);
-
-      if (!checkSuperAdmin) {
-        return res
-          .status(401)
-          .send("You don't have permission to create admin!");
-      }
-
       const { login, password } = req.body;
 
       const getLogin = await Admin.findOne({
@@ -88,25 +69,19 @@ export default {
         return res.status(400).send("This admin already exists!");
       }
 
-      await Admin.create({ login: login, password: sha256(password), role: 'admin' });
+      await Admin.create({
+        login: login,
+        password: sha256(password),
+        role: "admin",
+      });
 
       res.status(200).send("Successfully created!");
     } catch (err) {
       res.status(err?.status || 400).send(err.message);
     }
-  },
-  DELETE: async (req, res) => {
+  }
+  async DELETE(req, res) {
     try {
-      const { authorization } = req.headers;
-
-      const checkSuperAdmin = checkIsSuperAdmin(authorization);
-
-      if (!checkSuperAdmin) {
-        return res
-          .status(401)
-          .send("You don't have permission to delete admin!");
-      }
-
       const { id } = req.params;
 
       const deleteAdmin = await Admin.destroy({
@@ -123,8 +98,8 @@ export default {
     } catch (err) {
       res.status(err?.status || 400).send(err.message);
     }
-  },
-  CREATE_SUPER_ADMIN: async (req, res) => {
+  }
+  async CREATE_SUPER_ADMIN(req, res) {
     try {
       const { login, password } = req.body;
 
@@ -148,5 +123,5 @@ export default {
     } catch (err) {
       res.status(err?.status || 400).send(err.message);
     }
-  },
-};
+  }
+}
