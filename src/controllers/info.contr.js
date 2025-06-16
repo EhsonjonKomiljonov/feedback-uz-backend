@@ -1,10 +1,14 @@
 import { Info } from "../models/info.model.js";
+import { Region } from "../models/region.model.js";
+import { Republic } from "../models/republic.model.js";
 import { deleteFile } from "../utils/deleteFile.js";
 
 export class InfoController {
   async GET_ALL(req, res) {
     try {
-      const infos = await Info.findAll();
+      const infos = await Info.findAll({
+        include: [Republic, Region]
+      });
 
       res.status(200).send(infos);
     } catch (err) {

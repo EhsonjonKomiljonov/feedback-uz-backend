@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../utils/sequelize.js";
+import { Info } from "./info.model.js";
 
-export const EmployeesCategories = sequelize.define("EmployeesCategories", {
+export const EmployeeCategory = sequelize.define("EmployeesCategories", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -14,7 +15,7 @@ export const EmployeesCategories = sequelize.define("EmployeesCategories", {
     validate: {
       len: {
         args: [0, 50],
-        msg: "Category Name in uzbek must be less than 50 characters",
+        msg: "category_name_uz must be less than 50 characters",
       },
     },
   },
@@ -24,7 +25,7 @@ export const EmployeesCategories = sequelize.define("EmployeesCategories", {
     validate: {
       len: {
         args: [0, 50],
-        msg: "Category Name in russian must be less than 50 characters",
+        msg: "category_name_ru must be less than 50 characters",
       },
     },
   },
@@ -32,12 +33,12 @@ export const EmployeesCategories = sequelize.define("EmployeesCategories", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "Infos",
+      model: Info,
       key: "id",
     },
     validate: {
       isInt: true,
-      notNull: { msg: "Information ID is required" },
+      notNull: { msg: "information_id is required" },
     },
   }
 })

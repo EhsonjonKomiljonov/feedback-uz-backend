@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../utils/sequelize.js";
+import { Republic } from "./republic.model.js";
+import { Region } from "./region.model.js";
 
 export const Info = sequelize.define("Info", {
   id: {
@@ -12,24 +14,24 @@ export const Info = sequelize.define("Info", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "Republics",
+      model: Republic,
       key: "id",
     },
     validate: {
       isInt: true,
-      notNull: { msg: "Republic ID is required" },
+      notNull: { msg: "republic_id is required" },
     },
   },
   region_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "Regions",
+      model: Region,
       key: "id",
     },
     validate: {
       isInt: true,
-      notNull: { msg: "Region ID is required" },
+      notNull: { msg: "region_id is required" },
     },
   },
   city_uz: {
@@ -53,7 +55,7 @@ export const Info = sequelize.define("Info", {
     allowNull: false,
     validate: {
       notEmpty: true,
-      len: { args: [1, 100], msg: "Organization must be 1 to 150 characters" },
+      len: { args: [1, 100], msg: "organization must be 1 to 150 characters" },
     },
   },
   location: {
@@ -61,35 +63,35 @@ export const Info = sequelize.define("Info", {
     allowNull: false,
     validate: {
       notEmpty: true,
-      len: { args: [1, 100], msg: "Location must be 1 to 200 characters" },
+      len: { args: [1, 100], msg: "location must be 1 to 200 characters" },
     },
   },
   additional_info_uz: {
     type: DataTypes.STRING,
     allowNull: true,
     validate: {
-      len: { args: [0, 200], msg: "Must be less than 200 characters" },
+      len: { args: [0, 200], msg: "additional_info_uz must be less than 200 characters" },
     },
   },
   additional_info_ru: {
     type: DataTypes.STRING,
     allowNull: true,
     validate: {
-      len: { args: [0, 200], msg: "Must be less than 200 characters" },
+      len: { args: [0, 200], msg: "additional_info_ru must be less than 200 characters" },
     },
   },
   description_uz: {
     type: DataTypes.STRING,
     allowNull: true,
     validate: {
-      len: { args: [0, 200], msg: "Must be less than 500 characters" },
+      len: { args: [0, 200], msg: "description_uz must be less than 500 characters" },
     },
   },
   description_ru: {
     type: DataTypes.STRING,
     allowNull: true,
     validate: {
-      len: { args: [0, 200], msg: "Must be less than 500 characters" },
+      len: { args: [0, 200], msg: "description_ru must be less than 500 characters" },
     },
   },
   address: {
@@ -97,28 +99,28 @@ export const Info = sequelize.define("Info", {
     allowNull: false,
     validate: {
       notEmpty: true,
-      len: { args: [1, 200], msg: "Address must be 1 to 250 characters" },
+      len: { args: [1, 200], msg: "address must be 1 to 250 characters" },
     },
   },
   wi_fi: {
     type: DataTypes.STRING,
     allowNull: true,
     validate: {
-      len: { args: [0, 50], msg: "Wi-Fi must be less than 100 characters" },
+      len: { args: [0, 50], msg: "wi_fi must be less than 100 characters" },
     },
   },
   telegram: {
     type: DataTypes.STRING,
     allowNull: true,
     validate: {
-      isUrl: { msg: "Telegram must be a valid URL" },
+      isUrl: { msg: "telegram must be a valid URL" },
     },
   },
   instagram: {
     type: DataTypes.STRING,
     allowNull: true,
     validate: {
-      isUrl: { msg: "Instagram must be a valid URL" },
+      isUrl: { msg: "instagram must be a valid URL" },
     },
   },
   service: {
@@ -128,7 +130,7 @@ export const Info = sequelize.define("Info", {
       customCheck(value) {
         const num = BigInt(value);
         if (num <= 0n || num >= 100n) {
-          throw new Error("Value must be between 1 and 100");
+          throw new Error("service must be between 1 and 100");
         }
       },
     },

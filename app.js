@@ -6,6 +6,7 @@ import { RegionRouter } from "./src/routers/region.routes.js";
 import { RepublicRouter } from "./src/routers/republic.routes.js";
 import { InfoRouter } from "./src/routers/info.routes.js";
 import cors from "cors";
+import { EmployeeCategoryRouter } from "./src/routers/employee_category.routes.js";
 
 export const app = express();
 
@@ -34,3 +35,4 @@ app.use("/admin", AdminRouter);
 app.use("/regions", RegionRouter);
 app.use("/republic", RepublicRouter);
 app.use("/info", InfoRouter);
+app.use("/employee_category", EmployeeCategoryRouter);

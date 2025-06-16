@@ -2,10 +2,10 @@ import { sequelize } from "../utils/sequelize.js";
 import { Republic } from "./republic.model.js";
 import { Region } from "./region.model.js";
 import { Info } from "./info.model.js";
-import { EmployeesCategories } from "./employees_categories.model.js";
+import { EmployeeCategory } from "./employee_category.model.js";
 
-Region.hasMany(Info, { foreignKey: "region_id" });
-Republic.hasMany(Info, { foreignKey: "republic_id" });
-Info.hasMany(EmployeesCategories, { foreignKey: "information_id" });
+Info.belongsTo(Region, { foreignKey: "region_id" });
+Info.belongsTo(Republic, { foreignKey: "republic_id" });
+EmployeeCategory.belongsTo(Info, { foreignKey: "information_id" });
 
 await sequelize.sync({ alter: true });
