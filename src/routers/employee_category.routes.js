@@ -8,16 +8,8 @@ const { GET_ALL, CREATE, DELETE } = new EmployeeCategoryContr();
 
 EmployeeCategoryRouter.get(
   "/all",
-  (req, res, next) => checkIsAdmin(req, res, next, "admin"),
+  checkIsAdmin(["sub_admin", "admin"]),
   GET_ALL
 )
-  .post(
-    "/create",
-    (req, res, next) => checkIsAdmin(req, res, next, "admin"),
-    CREATE
-  )
-  .delete(
-    "/delete/:id",
-    (req, res, next) => checkIsAdmin(req, res, next, "admin"),
-    DELETE
-  );
+  .post("/create", checkIsAdmin(["sub_admin"]), CREATE)
+  .delete("/delete/:id", checkIsAdmin(["sub_admin"]), DELETE);

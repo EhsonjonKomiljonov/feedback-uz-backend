@@ -7,6 +7,9 @@ import { RepublicRouter } from "./src/routers/republic.routes.js";
 import { InfoRouter } from "./src/routers/info.routes.js";
 import cors from "cors";
 import { EmployeeCategoryRouter } from "./src/routers/employee_category.routes.js";
+import { EmployeeRouter } from "./src/routers/employee.routes.js";
+import { DepartmentRouter } from "./src/routers/department.routes.js";
+import { EmployeeReviewsRouter } from "./src/routers/employee_reviews.routes.js";
 
 export const app = express();
 
@@ -29,10 +32,13 @@ export const app = express();
 // app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(express.static(process.cwd() + "/public"));
+app.use(express.static(process.cwd() + "/public/uploads"));
 
 app.use("/admin", AdminRouter);
 app.use("/regions", RegionRouter);
 app.use("/republic", RepublicRouter);
 app.use("/info", InfoRouter);
+app.use("/department", DepartmentRouter);
 app.use("/employee_category", EmployeeCategoryRouter);
+app.use("/employee", EmployeeRouter);
+app.use("/employee_reviews", EmployeeReviewsRouter);

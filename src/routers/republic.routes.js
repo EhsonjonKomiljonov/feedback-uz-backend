@@ -6,8 +6,6 @@ export const RepublicRouter = Router();
 
 const { CREATE, GET_ALL, DELETE } = new RepublicController();
 
-RepublicRouter.post("/create", checkIsAdmin, CREATE).get(
-  "/all",
-  (req, res, next) => checkIsAdmin(req, res, next, "admin"),
-  GET_ALL
-).delete('/delete/:id', checkIsAdmin, DELETE);
+RepublicRouter.post("/create", checkIsAdmin(), CREATE)
+  .get("/all", checkIsAdmin(), GET_ALL)
+  .delete("/delete/:id", checkIsAdmin(), DELETE);

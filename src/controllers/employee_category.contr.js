@@ -1,11 +1,11 @@
-import { EmployeeCategory } from "../models/employee_category.model.js";
-import { Info } from "../models/info.model.js";
+import { Department } from "../models/department.model.js";
+import { EmployeeCategory } from "../models/employee_category.model.js"; 
 
 export class EmployeeCategoryContr {
   async GET_ALL(req, res) {
     try {
       const employeeCategories = await EmployeeCategory.findAll({
-        include: Info
+        include: Department
       });
 
       res.status(200).send(employeeCategories);
@@ -15,14 +15,14 @@ export class EmployeeCategoryContr {
   }
   async CREATE(req, res) {
     try {
-      const getInfo = await Info.findOne({
+      const getDepartment = await Department.findOne({
         where: {
-          id: req.body.information_id
+          id: req.body.department_id
         }
       })
 
-      if(!getInfo) {
-        return res.status(404).send("This info doesn't exist!");
+      if(!getDepartment) {
+        return res.status(404).send("This department doesn't exist!");
       }
 
       await EmployeeCategory.create(req.body);

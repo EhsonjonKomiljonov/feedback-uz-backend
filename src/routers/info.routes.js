@@ -7,7 +7,7 @@ export const InfoRouter = Router();
 
 const { CREATE, GET_ALL, UPDATE, DELETE } = new InfoController();
 
-InfoRouter.get("/all", checkIsAdmin, GET_ALL)
-  .patch("/update/:id", checkIsAdmin, upload.array("files"), UPDATE)
-  .post("/create", checkIsAdmin, upload.array("files"), CREATE)
+InfoRouter.get("/all", checkIsAdmin(), GET_ALL)
+  .patch("/update/:id", checkIsAdmin(), upload.array("files"), UPDATE)
+  .post("/create", checkIsAdmin(), upload.array("files"), CREATE)
   .delete("/delete/:id", DELETE);

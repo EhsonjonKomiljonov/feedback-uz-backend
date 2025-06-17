@@ -1,37 +1,45 @@
 import { Admin } from "../models/admin.model.js";
 import jwt from "jsonwebtoken";
 
-export const checkIsAdmin = async (req, res, next, role = ["superadmin"]) => {
-  try {
-    if (role === "admin") role = ["admin", "superadmin"];
+export const checkIsAdmin = (role) => {
+  return async (req, res, next) => {
+    try {
+      const { authorization } = req.headers;
 
-    const { authorization } = req.headers;
-
-    const verifyToken = jwt.verify(
-      authorization,
-      process.env.ACCESS_SECRET_KEY
-    );
-
-    if (verifyToken) {
-      const getAdmin = await Promise.all(
-        role.map(async (item) => {
-          return await Admin.findOne({
-            where: {
-              id: verifyToken?.id,
-              login: verifyToken?.login,
-              role: item,
-            },
-          });
-        })
+      const verifyToken = jwt.verify(
+        authorization,
+        process.env.ACCESS_SECRET_KEY
       );
 
-      if (!getAdmin) {
-        throw new Error(verifyToken);
-      }
-    }
+      if (verifyToken) {
+        const getAdmin = await Promise.all(
+          (!role ? ["super_admin"] : ["super_admin", ...role]).map(
+            async (item) => {
+              return await Admin.findOne({
+                where: {
+                  id: verifyToken?.id,
+                  login: verifyToken?.login,
+                  role: item,
+                },
+              });
+            }
+          )
+        );
 
-    next();
-  } catch (err) {
-    res.status(401).send("You are not an admin!");
-  }
+        const filteredAdmins = getAdmin.filter((item) => item != null);
+
+        if (filteredAdmins.length === 0) {
+          throw new Error(`You have no access for this action!`);
+        }
+
+        if (!filteredAdmins[0]?.is_active) {
+          throw new Error(`Your login is blocked! Contact with super admin!`);
+        }
+      }
+
+      next();
+    } catch (err) {
+      res.status(401).send(err.message);
+    }
+  };
 };

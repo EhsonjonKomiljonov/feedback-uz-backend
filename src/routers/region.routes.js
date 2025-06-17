@@ -6,8 +6,6 @@ export const RegionRouter = Router();
 
 const { CREATE, GET_ALL, DELETE } = new RegionController();
 
-RegionRouter.post("/create", checkIsAdmin, CREATE).get(
-  "/all",
-  (req, res, next) => checkIsAdmin(req, res, next, "admin"),
-  GET_ALL
-).delete('/delete/:id', checkIsAdmin, DELETE);
+RegionRouter.post("/create", checkIsAdmin(), CREATE)
+  .get("/all", checkIsAdmin(), GET_ALL)
+  .delete("/delete/:id", checkIsAdmin(), DELETE);

@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../utils/sequelize.js";
-import { Info } from "./info.model.js";
+import { sequelize } from "../utils/sequelize.js"; 
+import { Department } from "./department.model.js";
 
 export const EmployeeCategory = sequelize.define("EmployeesCategories", {
   id: {
@@ -29,16 +29,16 @@ export const EmployeeCategory = sequelize.define("EmployeesCategories", {
       },
     },
   },
-  information_id: {
+  department_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Info,
+      model: Department,
       key: "id",
     },
     validate: {
       isInt: true,
-      notNull: { msg: "information_id is required" },
+      notNull: { msg: "department_id is required" },
     },
   }
 })
