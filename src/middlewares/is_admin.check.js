@@ -1,3 +1,4 @@
+import { ACCESS_SECRET } from "../../env.js";
 import { Admin } from "../models/admin.model.js";
 import jwt from "jsonwebtoken";
 
@@ -6,10 +7,7 @@ export const checkIsAdmin = (role) => {
     try {
       const { authorization } = req.headers;
 
-      const verifyToken = jwt.verify(
-        authorization,
-        process.env.ACCESS_SECRET_KEY
-      );
+      const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
 
       if (verifyToken) {
         const getAdmin = await Promise.all(

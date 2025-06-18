@@ -10,6 +10,9 @@ import { EmployeeCategoryRouter } from "./src/routers/employee_category.routes.j
 import { EmployeeRouter } from "./src/routers/employee.routes.js";
 import { DepartmentRouter } from "./src/routers/department.routes.js";
 import { EmployeeReviewsRouter } from "./src/routers/employee_reviews.routes.js";
+import { PanelCategoryRouter } from "./src/routers/panel_category.routes.js";
+import { IconRouter } from "./src/routers/icon.routes.js";
+import { QualityCategoryRouter } from "./src/routers/quality_category.routes.js";
 
 export const app = express();
 
@@ -32,7 +35,7 @@ export const app = express();
 // app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(express.static(process.cwd() + "/public/uploads"));
+app.use('/uploads', express.static(process.cwd() + "/public/uploads"));
 
 app.use("/admin", AdminRouter);
 app.use("/regions", RegionRouter);
@@ -42,3 +45,6 @@ app.use("/department", DepartmentRouter);
 app.use("/employee_category", EmployeeCategoryRouter);
 app.use("/employee", EmployeeRouter);
 app.use("/employee_reviews", EmployeeReviewsRouter);
+app.use("/panel_category", PanelCategoryRouter);
+app.use("/icons", IconRouter);
+app.use("/quality_category", QualityCategoryRouter);

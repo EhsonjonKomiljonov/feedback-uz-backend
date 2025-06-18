@@ -1,11 +1,19 @@
 import { Department } from "../models/department.model.js";
-import { EmployeeCategory } from "../models/employee_category.model.js"; 
+import { EmployeeCategory } from "../models/employee_category.model.js";
+import jwt from "jsonwebtoken";
 
 export class EmployeeCategoryContr {
   async GET_ALL(req, res) {
     try {
+      const { authorization } = req.headers;
+
+      const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
+
       const employeeCategories = await EmployeeCategory.findAll({
-        include: Department
+        include: Department,
+        where: {
+          department_id: verifyToken?.department_id,
+        }
       });
 
       res.status(200).send(employeeCategories);
@@ -17,11 +25,11 @@ export class EmployeeCategoryContr {
     try {
       const getDepartment = await Department.findOne({
         where: {
-          id: req.body.department_id
-        }
-      })
+          id: req.body.department_id,
+        },
+      });
 
-      if(!getDepartment) {
+      if (!getDepartment) {
         return res.status(404).send("This department doesn't exist!");
       }
 

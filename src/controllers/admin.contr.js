@@ -2,6 +2,7 @@ import { Admin } from "../models/admin.model.js";
 import jwt from "jsonwebtoken";
 import sha256 from "sha256";
 import { Info } from "../models/info.model.js";
+import { ACCESS_SECRET, REFRESH_SECRET } from "../../env.js";
 
 export class AdminController {
   async GET_ALL(req, res) {
@@ -39,16 +40,28 @@ export class AdminController {
       }
 
       const token = jwt.sign(
-        { id: getLogin.id, login: getLogin.login },
-        process.env.ACCESS_SECRET_KEY,
+        {
+          id: getLogin.id,
+          login: getLogin.login,
+          role: getLogin.role,
+          information_id: getLogin.information_id,
+          department_id: getLogin.department_id,
+        },
+        ACCESS_SECRET,
         {
           expiresIn: "1d",
         }
       );
 
       const refreshToken = jwt.sign(
-        { id: getLogin.id, login: getLogin.login },
-        process.env.REFRESH_SECRET_KEY,
+        {
+          id: getLogin.id,
+          login: getLogin.login,
+          role: getLogin.role,
+          information_id: getLogin.information_id,
+          department_id: getLogin.department_id,
+        },
+        REFRESH_SECRET,
         {
           expiresIn: "7d",
         }
@@ -96,6 +109,10 @@ export class AdminController {
         return res.status(400).send("This admin already exists!");
       }
 
+      if (role == "admin" && req.body?.department_id) {
+        return res.status(400).send("You can't add admin with department_id!");
+      }
+
       await Admin.create({
         login: login,
         password: sha256(password),
@@ -128,9 +145,37 @@ export class AdminController {
       res.status(err?.status || 400).send(err.message);
     }
   }
-  async BLOCK_EVENT_ADMIN (req, res) {
+  async UPDATE_TOKEN(req, res) {
+    try {
+      const { refreshToken } = req.body;
+
+      if (!refreshToken) return res.status(401).send("Unauthorized!");
+
+      const payload = jwt.verify(refreshToken, REFRESH_SECRET);
+
+      const newAccessToken = jwt.sign(
+        {
+          id: payload.id,
+          login: payload.login,
+          role: payload.role,
+          information_id: payload.information_id,
+          department_id: payload.department_id,
+        },
+        ACCESS_SECRET,
+        {
+          expiresIn: "1d",
+        }
+      );
+
+      res.status(200).send({ accessToken: newAccessToken });
+    } catch (err) {
+      res.status(err?.status || 400).send(err.message);
+    }
+  }
+  async BLOCK_EVENT_ADMIN(req, res) {
     try {
       const { id } = req.params;
+      const { reason } = req.query;
 
       const admin = await Admin.findOne({
         where: {
@@ -142,10 +187,39 @@ export class AdminController {
         return res.status(400).send("This admin doesn't exist!");
       }
 
-      admin.is_active = !admin.is_active;
+      if (admin.role == "admin") {
+        const findAllAdmins = await Admin.findAll({
+          where: {
+            information_id: admin.dataValues.information_id,
+            role: ["admin", "sub_admin"],
+          },
+        });
+
+        findAllAdmins.map((item) => {
+          item.is_active = reason == "block" ? false : true;
+          item.save();
+        });
+
+        res
+          .status(200)
+          .send(
+            reason == "block"
+              ? "All admins and sub_admins successfully blocked!"
+              : "All admins and sub_admins successfully unblocked!"
+          );
+        return;
+      }
+
+      admin.is_active = reason == "block" ? false : true;
       await admin.save();
 
-      res.status(200).send("Successfully blocked!");
+      res
+        .status(200)
+        .send(
+          reason == "block"
+            ? "Successfully blocked!"
+            : "Successfully unblocked!"
+        );
     } catch (err) {
       return res.status(err?.status || 400).send(err.message);
     }

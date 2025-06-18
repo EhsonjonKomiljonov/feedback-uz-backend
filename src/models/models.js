@@ -6,6 +6,9 @@ import { EmployeeCategory } from "./employee_category.model.js";
 import { Employee } from "./employee.model.js";
 import { Department } from "./department.model.js";
 import { EmployeeReviews } from "./employee_reviews.model.js";
+import { Icon } from "./icon.model.js";
+import { PanelCategory } from "./panel_category.model.js";
+import { QualityCategory } from "./quality_categories.model.js";
 
 Info.belongsTo(Region, { foreignKey: "region_id" });
 Info.belongsTo(Republic, { foreignKey: "republic_id" });
@@ -18,5 +21,10 @@ Employee.belongsTo(Department, { foreignKey: "department_id" });
 Employee.belongsTo(EmployeeCategory, { foreignKey: "category_id" });
 
 EmployeeReviews.belongsTo(Employee, { foreignKey: "employee_id" });
+
+Icon.belongsTo(PanelCategory, { foreignKey: "panel_category_id" });
+
+QualityCategory.belongsTo(Icon, { foreignKey: "icon_id" });
+QualityCategory.belongsTo(Info, { foreignKey: "information_id" });
 
 await sequelize.sync({ alter: true });

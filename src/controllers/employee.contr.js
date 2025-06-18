@@ -1,19 +1,18 @@
 import { Department } from "../models/department.model.js";
 import { Employee } from "../models/employee.model.js";
-import { EmployeeCategory } from "../models/employee_category.model.js"; 
+import { EmployeeCategory } from "../models/employee_category.model.js";
+import jwt from "jsonwebtoken";
 
 export class EmployeeContr {
   async GET_ALL(req, res) {
     try {
-      const { department_id } = req.query;
+      const { authorization } = req.headers;
 
-      if (!department_id) {
-        throw new Error("department_id is required, send it with query!");
-      }
+      const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
 
       const employees = await Employee.findAll({
         include: [EmployeeCategory, Department],
-        where: { department_id },
+        where: { department_id: verifyToken.department_id },
       });
 
       res.status(200).send(employees);
@@ -23,7 +22,6 @@ export class EmployeeContr {
   }
   async CREATE(req, res) {
     try {
-
       await Employee.create({
         file: `/public/uploads/${req.file?.filename}`,
         ...req.body,

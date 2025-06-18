@@ -1,18 +1,18 @@
+import { ACCESS_SECRET } from "../../env.js";
 import { Department } from "../models/department.model.js";
 import { Info } from "../models/info.model.js";
+import jwt from "jsonwebtoken";
 
 export class DepartmentContr {
   async GET_ALL(req, res) {
     try {
-      const { information_id } = req.query;
+      const { authorization } = req.headers;
 
-      if (!information_id) {
-        throw new Error("information_id is required, send it with query!");
-      }
+      const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
 
       const departments = await Department.findAll({
         include: [Info],
-        where: { information_id },
+        where: { information_id: verifyToken?.information_id },
       });
 
       res.status(200).send(departments);
