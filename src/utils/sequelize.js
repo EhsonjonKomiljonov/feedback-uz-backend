@@ -6,6 +6,8 @@ if (NODE_ENV !== "production") {
   dotenv.config();
 }
 
+console.log(NODE_ENV, DATABASE_URL)
+
 export const sequelize = new Sequelize(DATABASE_URL, {
   dialect: "postgres",
   logging: false,
