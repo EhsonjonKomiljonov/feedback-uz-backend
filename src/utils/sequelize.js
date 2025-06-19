@@ -6,7 +6,7 @@ if (NODE_ENV !== "production") {
   dotenv.config();
 }
 
-export const sequelize = new Sequelize(process.env.DB_PUBLIC_HOST, {
+export const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   logging: false,
   dialectOptions: {
