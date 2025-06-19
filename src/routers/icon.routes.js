@@ -7,7 +7,7 @@ export const IconRouter = Router();
 
 const { GET_ALL, CREATE } = new IconContr();
 
-IconRouter.get("/all", checkIsAdmin(["sub_admin"]), GET_ALL).post(
+IconRouter.get("/all", checkIsAdmin(["sub_admin", "admin"]), GET_ALL).post(
   "/create",
   checkIsAdmin(),
   upload.single('file'),

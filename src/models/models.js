@@ -9,6 +9,8 @@ import { EmployeeReviews } from "./employee_reviews.model.js";
 import { Icon } from "./icon.model.js";
 import { PanelCategory } from "./panel_category.model.js";
 import { QualityCategory } from "./quality_categories.model.js";
+import { QualityRating } from "./quality_rating.model.js";
+import { ClientFeedback } from "./client_feedback.model.js";
 
 Info.belongsTo(Region, { foreignKey: "region_id" });
 Info.belongsTo(Republic, { foreignKey: "republic_id" });
@@ -26,5 +28,9 @@ Icon.belongsTo(PanelCategory, { foreignKey: "panel_category_id" });
 
 QualityCategory.belongsTo(Icon, { foreignKey: "icon_id" });
 QualityCategory.belongsTo(Info, { foreignKey: "information_id" });
+
+QualityRating.belongsTo(QualityCategory, { foreignKey: "quality_category_id" });
+
+ClientFeedback.belongsTo(Info, { foreignKey: "information_id" });
 
 await sequelize.sync({ alter: true });

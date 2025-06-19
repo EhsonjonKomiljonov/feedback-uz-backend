@@ -9,11 +9,13 @@ export class EmployeeCategoryContr {
 
       const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
 
+      if (!verifyToken) return res.status(401).send("Unauthorized!");
+
       const employeeCategories = await EmployeeCategory.findAll({
         include: Department,
         where: {
           department_id: verifyToken?.department_id,
-        }
+        },
       });
 
       res.status(200).send(employeeCategories);
@@ -23,9 +25,15 @@ export class EmployeeCategoryContr {
   }
   async CREATE(req, res) {
     try {
+      const { authorization } = req.headers;
+
+      const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
+
+      if (!verifyToken) return res.status(401).send("Unauthorized!");
+
       const getDepartment = await Department.findOne({
         where: {
-          id: req.body.department_id,
+          id: verifyToken.department_id,
         },
       });
 
@@ -33,7 +41,10 @@ export class EmployeeCategoryContr {
         return res.status(404).send("This department doesn't exist!");
       }
 
-      await EmployeeCategory.create(req.body);
+      await EmployeeCategory.create({
+        department_id: verifyToken.department_id,
+        ...req.body,
+      });
 
       res.status(200).send("Successfully created!");
     } catch (err) {

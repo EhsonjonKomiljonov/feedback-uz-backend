@@ -10,6 +10,8 @@ export class DepartmentContr {
 
       const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
 
+      if (!verifyToken) return res.status(401).send("Unauthorized!");
+
       const departments = await Department.findAll({
         include: [Info],
         where: { information_id: verifyToken?.information_id },
@@ -22,11 +24,15 @@ export class DepartmentContr {
   }
   async CREATE(req, res) {
     try {
-      const { information_id } = req.body;
+      const { authorization } = req.headers;
+
+      const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
+
+      if (!verifyToken) return res.status(401).send("Unauthorized!");
 
       const getInformation = await Info.findOne({
         where: {
-          id: information_id,
+          id: verifyToken.information_id,
         },
       });
 
@@ -36,7 +42,10 @@ export class DepartmentContr {
           .send(`This info with id: ${information_id} doesn't exist!`);
       }
 
-      await Department.create(req.body);
+      await Department.create({
+        information_id: verifyToken.information_id,
+        ...req.body,
+      });
 
       res.status(200).send("Successfully created!");
     } catch (err) {

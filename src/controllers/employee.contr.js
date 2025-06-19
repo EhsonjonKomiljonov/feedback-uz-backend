@@ -10,6 +10,8 @@ export class EmployeeContr {
 
       const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
 
+      if (!verifyToken) return res.status(401).send("Unauthorized!");
+
       const employees = await Employee.findAll({
         include: [EmployeeCategory, Department],
         where: { department_id: verifyToken.department_id },
@@ -22,7 +24,35 @@ export class EmployeeContr {
   }
   async CREATE(req, res) {
     try {
+      const { category_id } = req.body;
+      const { authorization } = req.headers;
+
+      const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
+
+      if (!verifyToken) return res.status(401).send("Unauthorized!");
+
+      const getCategory = await EmployeeCategory.findOne({
+        where: {
+          id: category_id,
+        },
+      });
+
+      if (!getCategory) {
+        return res.status(400).send("This employee category doesn't exist!");
+      }
+
+      const getDepartment = await Department.findOne({
+        where: {
+          id: verifyToken.department_id,
+        },
+      });
+
+      if (!getDepartment) {
+        return res.status(400).send("This department doesn't exist!");
+      }
+
       await Employee.create({
+        department_id: verifyToken.department_id,
         file: `/public/uploads/${req.file?.filename}`,
         ...req.body,
       });

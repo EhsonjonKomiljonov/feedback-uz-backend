@@ -15,6 +15,18 @@ export class EmployeeReviewsContr {
   }
   async CREATE(req, res) {
     try {
+      const { employee_id } = req.body;
+
+      const getEmployee = await Employee.findOne({
+        where: {
+          id: employee_id,
+        },
+      });
+
+      if (!getEmployee) {
+        return res.status(400).send("This employee doesn't exist!");
+      }
+
       await EmployeeReviews.create(req.body);
 
       res.status(200).send("Successfully created!");

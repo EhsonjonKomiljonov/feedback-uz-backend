@@ -13,6 +13,8 @@ import { EmployeeReviewsRouter } from "./src/routers/employee_reviews.routes.js"
 import { PanelCategoryRouter } from "./src/routers/panel_category.routes.js";
 import { IconRouter } from "./src/routers/icon.routes.js";
 import { QualityCategoryRouter } from "./src/routers/quality_category.routes.js";
+import { QualityRatingRouter } from "./src/routers/quality_rating.routes.js";
+import { ClientFeedbackRouter } from "./src/routers/client_feedback.routes.js";
 
 export const app = express();
 
@@ -35,7 +37,7 @@ export const app = express();
 // app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded());
-app.use('/uploads', express.static(process.cwd() + "/public/uploads"));
+app.use('/public/uploads', express.static(process.cwd() + "/public/uploads"));
 
 app.use("/admin", AdminRouter);
 app.use("/regions", RegionRouter);
@@ -48,3 +50,5 @@ app.use("/employee_reviews", EmployeeReviewsRouter);
 app.use("/panel_category", PanelCategoryRouter);
 app.use("/icons", IconRouter);
 app.use("/quality_category", QualityCategoryRouter);
+app.use("/quality_rating", QualityRatingRouter);
+app.use("/client_feedback", ClientFeedbackRouter);
