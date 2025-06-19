@@ -9,12 +9,12 @@ if (NODE_ENV !== "production") {
 export const sequelize = new Sequelize(process.env.DB_PUBLIC_HOST, {
   dialect: "postgres",
   logging: false,
-  // dialectOptions: {
-  //   ssl: {
-  //     require: true,
-  //     rejectUnauthorized: false, // required for Railway
-  //   },
-  // },
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
   // username: "postgres",
   // protocol: "postgres" ,
   // database: process.env.DB,
