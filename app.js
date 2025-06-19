@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import "./src/utils/sequelize.js";
 import "./src/models/models.js";
@@ -5,7 +6,6 @@ import { AdminRouter } from "./src/routers/admin.routes.js";
 import { RegionRouter } from "./src/routers/region.routes.js";
 import { RepublicRouter } from "./src/routers/republic.routes.js";
 import { InfoRouter } from "./src/routers/info.routes.js";
-import cors from "cors";
 import { EmployeeCategoryRouter } from "./src/routers/employee_category.routes.js";
 import { EmployeeRouter } from "./src/routers/employee.routes.js";
 import { DepartmentRouter } from "./src/routers/department.routes.js";
@@ -18,26 +18,23 @@ import { ClientFeedbackRouter } from "./src/routers/client_feedback.routes.js";
 
 export const app = express();
 
-// const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
+// const whitelist = ["http://localhost:3000", "http://localhost:5173"];
 
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true); // Allow request
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-//   allowedHeaders: ["Content-Type", "Authorization"],
-//   methods: "GET,POST,PUT,DELETE,PATCH",
-//   credentials: true,
+// const corsOptions = function (req, callback) {
+//   var corsOptions;
+//   if (whitelist.indexOf(req.header("Origin")) !== -1) {
+//     corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+//   } else {
+//     corsOptions = { origin: false }; // disable CORS for this request
+//   }
+//   callback(null, corsOptions); // callback expects two parameters: error and options
 // };
 
 // app.use(cors(corsOptions));
 // app.options("*", cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded());
-app.use('/public/uploads', express.static(process.cwd() + "/public/uploads"));
+app.use(express.urlencoded({ extended: true }));
+app.use("/public/uploads", express.static(process.cwd() + "/public/uploads"));
 
 app.use("/admin", AdminRouter);
 app.use("/regions", RegionRouter);
