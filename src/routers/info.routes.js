@@ -5,9 +5,9 @@ import { checkIsAdmin } from "../middlewares/is_admin.check.js";
 
 export const InfoRouter = Router();
 
-const { CREATE, GET_ALL, UPDATE, DELETE } = new InfoController();
+const { CREATE, GET_ALL, GET_ONE, UPDATE, DELETE } = new InfoController();
 
-InfoRouter.get("/all", checkIsAdmin(), GET_ALL)
+InfoRouter.get("/all", checkIsAdmin(), GET_ALL).get('/one/:id', GET_ONE)
   .patch("/update/:id", checkIsAdmin(), upload.array("files"), UPDATE)
   .post("/create", checkIsAdmin(), upload.array("files"), CREATE)
   .delete("/delete/:id", DELETE);

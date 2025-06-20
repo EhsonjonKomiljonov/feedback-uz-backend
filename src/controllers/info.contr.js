@@ -7,7 +7,7 @@ export class InfoController {
   async GET_ALL(req, res) {
     try {
       const infos = await Info.findAll({
-        include: [Republic, Region]
+        include: [Republic, Region],
       });
 
       res.status(200).send(infos);
@@ -15,9 +15,31 @@ export class InfoController {
       res.status(err?.status || 400).send(err.message);
     }
   }
+  async GET_ONE(req, res) {
+    try {
+      const { id } = req.params;
+
+      const info = await Info.findOne({
+        where: {
+          id: id,
+        },
+        include: [Republic, Region],
+      });
+
+      if (!info) {
+        return res.status(400).send("This info doesn't exist!");
+      }
+
+      res.status(200).send(info);
+    } catch (err) {
+      res.status(err?.status || 400).send(err.message);
+    }
+  }
   async CREATE(req, res) {
     try {
-      const generatedImages = req?.files?.map((file) => `/public/uploads/${file.filename}`);
+      const generatedImages = req?.files?.map(
+        (file) => `/public/uploads/${file.filename}`
+      );
 
       await Info.create({ files: generatedImages, ...req.body });
 
@@ -48,10 +70,12 @@ export class InfoController {
 
       const updatedData = { ...req.body };
       if (req?.files?.length) {
-        updatedData.files = req.files.map((f) => `/public/uploads/${f.filename}`);
+        updatedData.files = req.files.map(
+          (f) => `/public/uploads/${f.filename}`
+        );
       }
 
-       if (info?.files?.length) {
+      if (info?.files?.length) {
         for (const file of info.files) {
           deleteFile(`/${file}`);
         }
