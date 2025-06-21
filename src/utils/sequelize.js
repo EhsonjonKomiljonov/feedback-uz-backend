@@ -22,7 +22,7 @@ export const sequelize = new Sequelize(DATABASE_URL, {
 
 try {
   await sequelize.authenticate();
-  console.log("Connect db");
+  console.log("-------------- ✅ db Connected -------------------------------");
 } catch (err) {
-  console.log("Disconnect db err:" + err.message);
+  console.log("Disconnect db err: " + err.message);
 }

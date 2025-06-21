@@ -19,5 +19,3 @@ bot.use(i18nMiddleware());
 // HANDLERS
 registerHandlers(bot);
 
-bot.launch();
-console.log("-------------- ✅ Bot started working! -----------------------");

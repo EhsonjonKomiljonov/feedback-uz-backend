@@ -23,7 +23,7 @@ const whitelist = ["http://localhost:3000", "http://localhost:5173"];
 const corsOptions = function (req, callback) {
   var corsOptions;
   if (whitelist.indexOf(req.header("Origin")) !== -1) {
-    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+    corsOptions = { origin: true, credentials: true }; // reflect (enable) the requested origin in the CORS response
   } else {
     corsOptions = { origin: false }; // disable CORS for this request
   }
@@ -31,6 +31,7 @@ const corsOptions = function (req, callback) {
 };
 
 app.use(cors(corsOptions));
+app.options("/{*any}", cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/public/uploads", express.static(process.cwd() + "/public/uploads"));

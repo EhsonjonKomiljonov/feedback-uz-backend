@@ -1,5 +1,6 @@
 import i18next from "i18next";
 import { mainMenu } from "../keyboards/mainMenu.js";
+import { allInformationMenu } from "../keyboards/allInformationMenu.js";
 
 export const languageHandler = (bot) => {
   bot.action(/^lang_(.+)/, async (ctx) => {
@@ -10,6 +11,6 @@ export const languageHandler = (bot) => {
 
     ctx.t = i18next.getFixedT(ctx.match[1]);
 
-    ctx.reply(ctx.t("after_lang"), payload ? mainMenu() : {});
+    ctx.reply(ctx.t("after_lang"), payload != 'start' ? mainMenu() : await allInformationMenu());
   });
 };
