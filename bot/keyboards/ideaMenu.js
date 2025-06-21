@@ -1,3 +1,5 @@
+import { backMenu } from "./backMenu.js";
+
 export const ideaMenu = () => ({
   reply_markup: {
     keyboard: [
@@ -10,7 +12,7 @@ export const ideaMenu = () => ({
           callback_data: "review_employee",
         },
       ],
-      [{ text: "⬅️ Ortga" }],
+      backMenu(),
     ],
     resize_keyboard: true,
   },

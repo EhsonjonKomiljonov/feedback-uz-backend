@@ -32,6 +32,9 @@ export const app = express();
 
 app.use(cors({ origin: "*" }));
 
+// app.use(cors());
+// app.options(/.*/, cors(corsOptions));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/public/uploads", express.static(process.cwd() + "/public/uploads"));

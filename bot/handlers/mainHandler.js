@@ -1,19 +1,28 @@
 import axios from "axios";
 import { ideaMenu } from "../keyboards/ideaMenu.js";
 import { BASE_API_URL } from "../../env.js";
+import { backMenu } from "../keyboards/backMenu.js";
+import { allInformationMenu } from "../keyboards/allInformationMenu.js";
 
 export const mainHandler = (bot) => {
-  bot.hears("❕ Ma'lumot", async (ctx) => {
-    ctx.session.prevPage = "info";
+  bot.action("about_info", async (ctx) => {
+    ctx.session.prevPage = "information";
     const payloadName = ctx.session?.refId?.split("_")[0];
     const payloadId = ctx.session?.refId?.split("_")[1];
+    const infoId = ctx.session.infoId;
 
     try {
-      if (payloadName == "info") {
-        const data = await axios.get(`${BASE_API_URL}/info/one/${payloadId}`);
+      if (payloadName == "info" || infoId.includes("info")) {
+        const data = await axios.get(
+          `${BASE_API_URL}/info/one/${payloadId || infoId.split("_")[1]}`
+        );
 
         if (data.data) {
-          ctx.reply(
+          await ctx.answerCbQuery();
+
+          await ctx.deleteMessage()
+
+          await ctx.reply(
             `${data?.data?.organization}
 Viloyat: ${data?.data?.location}
 Shahar: ${data?.data?.city_uz}
@@ -27,19 +36,15 @@ ${
     ? `Izoh: ${data?.data?.[`description_${ctx.session.lang}`]}`
     : ""
 }
-          `,
-            {
-              reply_markup: {
-                keyboard: [["⬅️ Ortga"]],
-                resize_keyboard: true,
-              },
-              parse_mode: "HTML",
-            }
+          `
           );
+
+          await ctx.reply("Quyidagi bo'limlardan birini tanlang 👇", await allInformationMenu());
         }
       }
     } catch (err) {
-      ctx.reply("Ups! Xatolik yuz berdi, iltimos qayta urinib ko'ring.");
+      console.log(err);
+      ctx.reply("Ups! Xatolik yuz berdi, iltimos qayta urinib ko'ring /start");
     }
   });
 

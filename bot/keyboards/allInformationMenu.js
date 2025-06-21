@@ -6,7 +6,7 @@ export const allInformationMenu = async () => {
   const buttons =
     information?.data?.map((item) => ({
       text: item.organization,
-      callback_data: `org_${item.id}`,
+      callback_data: `info_${item.id}`,
     })) || [];
 
   const inline_keyboard = [];

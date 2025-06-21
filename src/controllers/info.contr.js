@@ -44,7 +44,7 @@ export class InfoController {
           where: req.query,
         });
 
-        if (!info) return res.status(400).send("Not found infos!");
+        if (!info?.id) return res.status(400).send("Not found info!");
 
         res.status(200).send(info);
       } else {

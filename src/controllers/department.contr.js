@@ -6,14 +6,41 @@ import jwt from "jsonwebtoken";
 export class DepartmentContr {
   async GET_ALL(req, res) {
     try {
-      const information_id = req.query?.information_id
-      
+      const information_id = req.query?.information_id;
+
       const departments = await Department.findAll({
         include: [Info],
         where: { information_id: information_id },
       });
 
       res.status(200).send(departments);
+    } catch (err) {
+      res.status(err?.status || 400).send(err.message);
+    }
+  }
+  async GET_BY_FILTER(req, res) {
+    try {
+      if (!Object.keys(req.query)?.length > 1) {
+        const departments = await Department.findAll({
+          include: [Info],
+          where: req.query,
+        });
+
+        if (!departments.length)
+          return res.status(400).send("Not found departments!");
+
+        res.status(200).send(departments);
+      } else {
+        const department = await Department.findOne({
+          include: [Info],
+          where: req.query,
+        });
+
+        if (!department?.id)
+          return res.status(400).send("Not found department!");
+
+        res.status(200).send(department);
+      }
     } catch (err) {
       res.status(err?.status || 400).send(err.message);
     }
