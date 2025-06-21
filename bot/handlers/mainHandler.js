@@ -43,7 +43,6 @@ ${
         }
       }
     } catch (err) {
-      console.log(err);
       ctx.reply("Ups! Xatolik yuz berdi, iltimos qayta urinib ko'ring /start");
     }
   });

@@ -62,7 +62,7 @@ export class DepartmentContr {
       if (!getInformation) {
         return res
           .status(400)
-          .send(`This info with id: ${information_id} doesn't exist!`);
+          .send(`This info with id: ${verifyToken.information_id} doesn't exist!`);
       }
 
       await Department.create({
