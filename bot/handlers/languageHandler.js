@@ -11,6 +11,15 @@ export const languageHandler = (bot) => {
 
     ctx.t = i18next.getFixedT(ctx.match[1]);
 
-    ctx.reply(ctx.t("after_lang"), payload != 'start' ? mainMenu() : await allInformationMenu());
+    // await ctx.deleteMessage();
+
+    await ctx.editMessageText(`${ctx.match[1] == 'uz' ? "🇺🇿 O'zbek tili tanlandi" : "🇷🇺 Русский язык выбран"}`);
+
+    await ctx.reply(
+      payload != "start"
+        ? ctx.t("after_lang")
+        : "Quyidagi tashkilotlardan birini tanlang 👇",
+      payload != "start" ? mainMenu() : await allInformationMenu()
+    );
   });
 };

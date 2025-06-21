@@ -31,7 +31,7 @@ const corsOptions = function (req, callback) {
 };
 
 app.use(cors(corsOptions));
-app.options("/{*any}", cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/public/uploads", express.static(process.cwd() + "/public/uploads"));

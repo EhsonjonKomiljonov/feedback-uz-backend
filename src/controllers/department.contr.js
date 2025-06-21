@@ -6,15 +6,11 @@ import jwt from "jsonwebtoken";
 export class DepartmentContr {
   async GET_ALL(req, res) {
     try {
-      const { authorization } = req.headers;
-
-      const verifyToken = jwt.verify(authorization, ACCESS_SECRET);
-
-      if (!verifyToken) return res.status(401).send("Unauthorized!");
-
+      const information_id = req.query?.information_id
+      
       const departments = await Department.findAll({
         include: [Info],
-        where: { information_id: verifyToken?.information_id },
+        where: { information_id: information_id },
       });
 
       res.status(200).send(departments);

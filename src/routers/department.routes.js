@@ -6,7 +6,7 @@ export const DepartmentRouter = Router();
 
 const { CREATE, GET_ALL, UPDATE, DELETE } = new DepartmentContr();
 
-DepartmentRouter.get("/all", checkIsAdmin(), GET_ALL)
+DepartmentRouter.get("/all", GET_ALL)
   .post("/create", checkIsAdmin(), CREATE)
   .patch("/update/:id", checkIsAdmin(), UPDATE)
   .delete("/delete/:id", checkIsAdmin(), DELETE);

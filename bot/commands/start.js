@@ -11,8 +11,8 @@ export const startCommand = (bot) => {
     }
 
     ctx.reply(
-      `Assalomu alaykum!
-FeedbackUz ning rasmiy botiga xush kelibsiz`,
+      `Assalomu alaykum! 
+✅ FeedbackUz ning rasmiy botiga xush kelibsiz`,
       {
         reply_markup: {
           remove_keyboard: true,

@@ -1,3 +1,4 @@
+import { ACCESS_SECRET } from "../../env.js";
 import { Department } from "../models/department.model.js";
 import { EmployeeCategory } from "../models/employee_category.model.js";
 import jwt from "jsonwebtoken";

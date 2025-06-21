@@ -1,3 +1,4 @@
+import e from "cors";
 import { Info } from "../models/info.model.js";
 import { Region } from "../models/region.model.js";
 import { Republic } from "../models/republic.model.js";
@@ -31,6 +32,31 @@ export class InfoController {
       }
 
       res.status(200).send(info);
+    } catch (err) {
+      res.status(err?.status || 400).send(err.message);
+    }
+  }
+  async GET_BY_FILTER(req, res) {
+    try {
+      if (Object.keys(req.query).length == 1) {
+         const info = await Info.findOne({
+          include: [Republic, Region],
+          where: req.query,
+        });
+
+        if (!info) return res.status(400).send("Not found infos!");
+
+        res.status(200).send(info);
+      } else {
+        const infos = await Info.findAll({
+          include: [Republic, Region],
+          where: req.query,
+        });
+
+        if (!infos.length) return res.status(400).send("Not found infos!");
+
+        res.status(200).send(infos);
+      }
     } catch (err) {
       res.status(err?.status || 400).send(err.message);
     }
