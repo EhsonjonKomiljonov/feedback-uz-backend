@@ -19,10 +19,14 @@ Viloyat: ${data?.data?.location}
 Shahar: ${data?.data?.city_uz}
 Manzil: ${data?.data?.address}
 Telefon: ${data?.data?.phone}
-${data?.data?.telegram && `Telegram: ${data?.data?.telegram}`}
-${data?.data?.instagram && `Instagram: ${data?.data?.instagram}`}
-${data?.data?.wi_fi && `Telegram: ${data?.data?.wi_fi}`}
-${data?.data?.description_uz && `Izoh: ${data?.data?.[`description_${ctx.session.lang}`]}`}
+${data?.data?.telegram ? `Telegram: ${data?.data?.telegram}` : ""}
+${data?.data?.instagram ? `Instagram: ${data?.data?.instagram}` : ""}
+${data?.data?.wi_fi ? `Telegram: ${data?.data?.wi_fi}` : ""}
+${
+  data?.data?.description_uz
+    ? `Izoh: ${data?.data?.[`description_${ctx.session.lang}`]}`
+    : ""
+}
           `,
             {
               reply_markup: {

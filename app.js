@@ -18,20 +18,19 @@ import { ClientFeedbackRouter } from "./src/routers/client_feedback.routes.js";
 
 export const app = express();
 
-// const whitelist = ["http://localhost:3000", "http://localhost:5173"];
+const whitelist = ["http://localhost:3000", "http://localhost:5173"];
 
-// const corsOptions = function (req, callback) {
-//   var corsOptions;
-//   if (whitelist.indexOf(req.header("Origin")) !== -1) {
-//     corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-//   } else {
-//     corsOptions = { origin: false }; // disable CORS for this request
-//   }
-//   callback(null, corsOptions); // callback expects two parameters: error and options
-// };
+const corsOptions = function (req, callback) {
+  var corsOptions;
+  if (whitelist.indexOf(req.header("Origin")) !== -1) {
+    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false }; // disable CORS for this request
+  }
+  callback(null, corsOptions); // callback expects two parameters: error and options
+};
 
-// app.use(cors(corsOptions));
-// app.options("*", cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/public/uploads", express.static(process.cwd() + "/public/uploads"));

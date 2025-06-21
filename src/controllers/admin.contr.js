@@ -70,6 +70,7 @@ export class AdminController {
       res.status(200).send({
         token: token,
         refreshToken: refreshToken,
+        role: getLogin.role,
       });
     } catch (err) {
       res.status(err?.status || 400).send(err.message);
@@ -167,7 +168,7 @@ export class AdminController {
         }
       );
 
-      res.status(200).send({ accessToken: newAccessToken });
+      res.status(200).send({ accessToken: newAccessToken, role: payload.role });
     } catch (err) {
       res.status(err?.status || 400).send(err.message);
     }
